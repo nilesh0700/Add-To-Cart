@@ -28,18 +28,22 @@ addButtonEl.addEventListener("click", function() {
 })
 // the onValye() function is triggered when there is any addition, updation and deletion in a realtime dataset
 onValue(shoppingListInDB, function(snapshot){
-    let snapValues = snapshot.val();
-    let itemsArray = Object.entries(snapValues);// get both entries therefore used Object.entries() function
 
-    clearShoppingListEl(); // clear the shopping list to avoid the duplication of the entries
-    
-    for(let i = 0; i < itemsArray.length; i++){
 
-        let currentItem = itemsArray[i];
-        let currentItemID = currentItem[0];
-        let currentItemValue = currentItem[1];
+    if(snapshot.exists()){ // to check wether there is any item left/ reference is not deleted(to solve the bug which was occuring after clicking on the last Item in the list)
+        let snapValues = snapshot.val();
+        let itemsArray = Object.entries(snapValues);// get both entries therefore used Object.entries() function
+        clearShoppingListEl(); // clear the shopping list to avoid the duplication of the entries
+        for(let i = 0; i < itemsArray.length; i++){
 
-        addItemToShoppingListEl(currentItem); // adding both id and value from database
+            let currentItem = itemsArray[i];
+            let currentItemID = currentItem[0];
+            let currentItemValue = currentItem[1];
+
+            addItemToShoppingListEl(currentItem); // adding both id and value from database
+        }
+    }else{
+        shoppingListEl.innerHTML = "no items here";
     }
 })
 
